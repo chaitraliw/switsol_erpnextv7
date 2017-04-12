@@ -474,7 +474,11 @@ def make_sales_invoice(source_name, target_doc=None, ignore_permissions=False):
 		"Sales Team": {
 			"doctype": "Sales Team",
 			"add_if_empty": True
-		}
+		},
+		"Sales Order Sales Person": {
+        	"doctype": "Sales Order Sales Person",
+        	"add_if_empty": True
+        }
 	}, target_doc, postprocess, ignore_permissions=ignore_permissions)
 
 	return doclist

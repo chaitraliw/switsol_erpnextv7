@@ -16,11 +16,19 @@ def get_data():
 			},
 			{
 				'label': _('Support'),
-				'items': ['Issue']
+				'items': ['Issue', 'Maintenance Schedule', 'Communication', 'Letter']
 			},
 			{
 				'label': _('Projects'),
 				'items': ['Project']
+			},
+			{
+				'label': _('Communication/Call Log'),
+				'items': ['Call Logs']
+			},
+			{
+				'label': _('Planned date for communication'),
+				'items': ['Call Logs']
 			}
 		]
 	}

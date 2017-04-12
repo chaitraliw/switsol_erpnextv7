@@ -112,7 +112,11 @@ def _make_sales_order(source_name, target_doc=None, ignore_permissions=False):
 			"Sales Team": {
 				"doctype": "Sales Team",
 				"add_if_empty": True
-			}
+			},
+			"Sales Order Sales Person": {
+            	"doctype": "Sales Order Sales Person",
+            	"add_if_empty": True
+            }
 		}, target_doc, set_missing_values, ignore_permissions=ignore_permissions)
 
 	# postprocess: fetch shipping address, set missing values
