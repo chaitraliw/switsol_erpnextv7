@@ -1,6 +1,6 @@
 // Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 // License: GNU General Public License v3. See license.txt
-
+{% include 'switsol/custom_scripts/customer.js' %}
 frappe.ui.form.on("Customer", {
 	setup: function(frm) {
 		frm.add_fetch('lead_name', 'company_name', 'customer_name');

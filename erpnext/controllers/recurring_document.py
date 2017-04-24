@@ -127,11 +127,19 @@ def get_next_date(dt, mcount, day=None):
 
 def send_notification(new_rv):
 	"""Notify concerned persons about recurring document generation"""
-
+	image = ""
+	if new_rv.chief_signature_value:
+		image = "<img style=\"width:150px;height:100px\" src=\"" + new_rv.chief_signature_value + "\">"
+	outgoing_email_account = frappe.db.get_value("Email Account",
+							{"default_outgoing": 1, "enable_outgoing": 1},
+							["email_id"], as_dict=True)
+	sender = formataddr([_("{0} - Accounting").format(new_rv.company), outgoing_email_account.email_id])
 	frappe.sendmail(new_rv.notification_email_address,
-		subject=  _("New {0}: #{1}").format(new_rv.doctype, new_rv.name),
-		message = _("Please find attached {0} #{1}").format(new_rv.doctype, new_rv.name),
-		attachments = [frappe.attach_print(new_rv.doctype, new_rv.name, file_name=new_rv.name, print_format=new_rv.recurring_print_format)])
+		sender=sender,
+		subject=_("Invoice from {0} ({1})").format(new_rv.company, new_rv.name),
+		message=_("Dear Sir, Dear Madame<p>Enclosed you will find your latest invoice, according to our contract.</p><p>Please do not hesitate to contact us for further information.</p><p>Kind Regards,</p><p>{0}</p><p>{1}</p><p>{2}</p>").format(image, new_rv.chief_signature, new_rv.company),
+		attachments=[frappe.attach_print(new_rv.doctype, new_rv.name, file_name=new_rv.name, print_format=new_rv.recurring_print_format)])
+
 
 def notify_errors(doc, doctype, party, owner):
 	from frappe.utils.user import get_system_managers

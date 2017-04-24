@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 import frappe
 import frappe.defaults
 from frappe.utils import cint, flt
+from frappe.utils.data import add_to_date
 from frappe import _, msgprint, throw
 from erpnext.accounts.party import get_party_account, get_due_date
 from erpnext.controllers.stock_controller import update_gl_entries_after
@@ -215,6 +216,7 @@ class SalesInvoice(SellingController):
 			self.debit_to = get_party_account("Customer", self.customer, self.company)
 		if not self.due_date and self.customer:
 			self.due_date = get_due_date(self.posting_date, "Customer", self.customer, self.company)
+		self.due_date = add_to_date(self.posting_date, days=self.payment_period)
 
 		super(SalesInvoice, self).set_missing_values(for_validate)
 

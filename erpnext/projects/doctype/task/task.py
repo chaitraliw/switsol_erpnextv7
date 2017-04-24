@@ -142,6 +142,8 @@ def get_events(start, end, filters=None):
 			"end": end
 		}, as_dict=True, update={"allDay": 0})
 
+	for value in data:
+		value['status'] = _(value['status'])
 	return data
 
 def get_project(doctype, txt, searchfield, start, page_len, filters):

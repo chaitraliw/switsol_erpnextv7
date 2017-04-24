@@ -22,7 +22,7 @@ class Address(Document):
 				or self.supplier or self.sales_partner or self.lead
 
 		if self.address_title:
-			self.name = (cstr(self.address_title).strip() + "-" + cstr(self.address_type).strip())
+			self.name = (cstr(self.address_title).strip() + "-" + _(cstr(self.address_type).strip()))
 			if frappe.db.exists("Address", self.name):
 				self.name = make_autoname(cstr(self.address_title).strip() + "-" + 
 					cstr(self.address_type).strip() + "-.#")
@@ -101,7 +101,8 @@ def get_address_display(address_dict):
 		address_dict = frappe.db.get_value("Address", address_dict, "*", as_dict=True) or {}
 
 	name, template = get_address_templates(address_dict)
-	
+	address_dict['country'] = _(address_dict['country'])
+	address_dict['address_type'] = _(address_dict['address_type'])
 	try:
 		return frappe.render_template(template, address_dict)
 	except TemplateSyntaxError:

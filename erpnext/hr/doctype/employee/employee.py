@@ -4,7 +4,7 @@
 from __future__ import unicode_literals
 import frappe
 
-from frappe.utils import getdate, validate_email_add, today, add_years
+from frappe.utils import getdate, validate_email_add, today, add_years, now_datetime
 from frappe.model.naming import make_autoname
 from frappe import throw, _
 import frappe.permissions
@@ -204,14 +204,15 @@ def send_birthday_reminders():
 			users = [u.email_id or u.name for u in get_enabled_system_users()]
 
 		for e in birthdays:
+			years = now_datetime().year - e.get("date_of_birth").year
 			frappe.sendmail(recipients=filter(lambda u: u not in (e.company_email, e.personal_email, e.user_id), users),
 				subject=_("Birthday Reminder for {0}").format(e.employee_name),
-				message=_("""Today is {0}'s birthday!""").format(e.employee_name),
+				message=_("Today is {0}'s birthday! (S)He's now {1} years old.<br><p>Regards,</p><p>Your Switsol-Team</p>").format(e.employee_name, years),
 				reply_to=e.company_email or e.personal_email or e.user_id)
 
 def get_employees_who_are_born_today():
 	"""Get Employee properties whose birthday is today."""
-	return frappe.db.sql("""select name, personal_email, company_email, user_id, employee_name
+	return frappe.db.sql("""select name, personal_email, company_email, user_id, employee_name, date_of_birth
 		from tabEmployee where day(date_of_birth) = day(%(date)s)
 		and month(date_of_birth) = month(%(date)s)
 		and status = 'Active'""", {"date": today()}, as_dict=True)
