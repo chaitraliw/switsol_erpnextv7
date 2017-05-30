@@ -37,7 +37,7 @@ class LeaveApplication(Document):
 		self.show_block_day_warning()
 		self.validate_block_days()
 		self.validate_salary_processed_days()
-		self.validate_leave_approver()
+		# self.validate_leave_approver()
 
 	def on_update(self):
 		if (not self.previous_doc and self.leave_approver) or (self.previous_doc and \
@@ -199,7 +199,6 @@ class LeaveApplication(Document):
 	def validate_leave_approver(self):
 		employee = frappe.get_doc("Employee", self.employee)
 		leave_approvers = [l.leave_approver for l in employee.get("leave_approvers")]
-
 		if len(leave_approvers) and self.leave_approver not in leave_approvers:
 			frappe.throw(_("Leave approver must be one of {0}")
 				.format(comma_or(leave_approvers)), InvalidLeaveApproverError)
